@@ -195,20 +195,30 @@ document.addEventListener('pointerover',tipf);document.addEventListener('focusin
 const NL={'Your phone':'Where you type. It packs your message into data and sends it off.',Network:'Routers and cables that pass data along, one hop at a time.',Server:'A computer that stores things and answers requests from other devices.',Friend:'The receiving phone. It unpacks the data and shows the message.',You:'You, using a laptop or phone, starting the whole chain.',DNS:'The internet’s phonebook. It turns a name into a numeric address.',Response:'The web page data travelling back to you.',Screen:'Your browser turns the data into the page you see.',App:'The program you are using. It asks for data on your behalf.',Index:'A sorted list of where each row lives, so the database can jump straight to it.',Cache:'A small, very fast shelf of recently used data.',Database:'Organised storage that can be searched quickly.',Disk:'Permanent storage. Slow, but it remembers when the power is off.','Working folder':'Where you edit files. Nothing is saved to history yet.',Staging:'A waiting room for the changes you want in the next snapshot.','Local repo':'The history of snapshots stored on your own computer.',Remote:'The shared copy on a server that your whole team can see.',OS:'The operating system. It manages memory, files and programs.',Memory:'Fast, temporary storage for what the computer is using right now.'};
 const ipf=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return[(h&255)||93,(h>>8)&255,(h>>16)&255,((h>>>24)&255)||34].join('.')};
 const esc=t=>String(t).replace(/[<&]/g,'');
-function scramble(el,txt,ms=900){const cs='ABCDEFGHJKLMNPQRSTUVWXYZ#%&01',t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/ms);el.textContent=[...txt].map((c,i)=>c===' '||k>i/txt.length?c:cs[Math.random()*cs.length|0]).join('');if(k<1)requestAnimationFrame(f)})(t0)}
+function scramble(el,txt,ms=900){const cs='ABCDEFGHJKLMNPQRSTUVWXYZ#%&01',t0=performance.now(),id=el._s=(el._s||0)+1;(function f(t){if(el._s!=id)return;const k=Math.min(1,(t-t0)/ms);el.textContent=[...txt].map((c,i)=>c===' '||k>i/txt.length?c:cs[Math.random()*cs.length|0]).join('');if(k<1)requestAnimationFrame(f)})(t0)}
 // celebration burst from an element
 function boom(el){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,cl=['#4fd8ff','#25e08a','#ffd25a','#ff5d8f','#a98bff'];
 for(let i=0;i<44;i++){const d=document.createElement('i'),a=Math.random()*6.28,v=80+Math.random()*180;d.className='cf';d.style.cssText=`left:${x}px;top:${y}px;background:${cl[i%5]}`;document.body.appendChild(d);
 d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v+120}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:900+Math.random()*500,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>d.remove()}}
-// ambient background: drifting aurora that leans toward the pointer
-(function(){const c=$('#bg'),x=c.getContext('2d');let w,h,t=0,m={x:innerWidth/2,y:innerHeight/3,px:0,py:0};
-const O=[[0,47,140,255,.5],[1,79,216,255,.4],[2,150,90,255,.4],[3,37,224,138,.28]].map(o=>({i:o[0],c:o.slice(1,4),a:o[4]}));
-const rs=()=>{w=c.width=innerWidth;h=c.height=innerHeight};addEventListener('resize',rs);rs();
-addEventListener('pointermove',e=>{m.x=e.clientX;m.y=e.clientY});
-(function f(){t+=.004;x.clearRect(0,0,w,h);x.globalCompositeOperation='lighter';
-for(const o of O){const r=Math.max(w,h)*.38,ox=w*(.5+.34*Math.sin(t*(1+o.i*.37)+o.i*2))+(m.x-w/2)*.06*(o.i+1)/2,oy=h*(.5+.34*Math.cos(t*(.8+o.i*.29)+o.i*3))+(m.y-h/2)*.06*(o.i+1)/2;
-const g=x.createRadialGradient(ox,oy,0,ox,oy,r);g.addColorStop(0,`rgba(${o.c},${o.a*.34})`);g.addColorStop(1,`rgba(${o.c},0)`);x.fillStyle=g;x.fillRect(0,0,w,h)}
-x.globalCompositeOperation='source-over';requestAnimationFrame(f)})()})();
+// ambient background: a lattice of shapes. Triangles ripple on their own and morph into spinning diamonds near the pointer.
+(function(){const c=$('#bg'),x=c.getContext('2d');let w,h,t=0,m={x:innerWidth/2,y:innerHeight/3,sx:innerWidth/2,sy:innerHeight/3},str=0,lm=-1e9,G=44;
+const rs=()=>{w=c.width=innerWidth;h=c.height=innerHeight;G=w<700?36:46};addEventListener('resize',rs);rs();
+addEventListener('pointermove',e=>{m.x=e.clientX;m.y=e.clientY;lm=performance.now()});
+const lerp=(a,b,k)=>a+(b-a)*k;
+(function f(){t+=.008;x.clearRect(0,0,w,h);
+m.sx=lerp(m.sx,m.x,.12);m.sy=lerp(m.sy,m.y,.12);
+str=lerp(str,performance.now()-lm<3000?1:0,.04);
+x.lineJoin='round';x.lineWidth=1.3;
+let row=0;for(let gy=G/2;gy<h+G;gy+=G*.9,row++)for(let gx=G/2+(row%2?G/2:0);gx<w+G;gx+=G){
+const dx=m.sx-gx,dy=m.sy-gy,d=Math.hypot(dx,dy),n=Math.exp(-d/260)*str,
+wv=.5+.5*Math.sin(gx*.008+gy*.006-t*2.2),k=Math.min(1,wv*.3+n),
+r=6+3*wv+11*n,ro=n*Math.PI*1.5+Math.sin(t+gx*.01)*.08,co=Math.cos(ro),si=Math.sin(ro),
+q=[[0,-r],[lerp(r*.87,r,k),lerp(r*.5,0,k)],[0,lerp(r*.5,r,k)],[-lerp(r*.87,r,k),lerp(r*.5,0,k)]],
+hu=205+n*60-(d<150?n*70:0);
+x.beginPath();q.forEach((p,i)=>{const px=gx+p[0]*co-p[1]*si,py=gy+p[0]*si+p[1]*co;i?x.lineTo(px,py):x.moveTo(px,py)});x.closePath();
+x.strokeStyle=`hsla(${hu},95%,${62+n*10}%,${.14+.6*n+.08*wv})`;x.stroke();
+if(n>.08){x.fillStyle=`hsla(${hu},95%,60%,${.14*n})`;x.fill()}}
+requestAnimationFrame(f)})()})();
 function sim(S){
 let vi=0,si=0,tm=null,done=0,st,els,cb,cur=0;
 app.innerHTML=`<div class="wrap"><button class="bk">← Back</button><h3 style="margin-top:20px">${S.i} ${S.n}</h3><p class="ask">${S.q}</p><div class="st"><div class="tabs">${S.S.map((v,i)=>`<button class="tab" data-i="${i}">${v[0]}</button>`).join('')}</div>${S.inp?`<input class="inp" id="iv" value="${S.inp}" aria-label="Type here">`:''}<div class="pipe" id="pp"></div><div class="nt" id="nt">Tap any device to see what it does. Keyboard: space plays or pauses, ← → step through.</div><div class="hud" id="hud"><div class="hb"><b id="hbar"></b></div><span class="hm" id="hms">0 ms</span></div><div class="ex" id="ex"></div><div class="ctl"><button class="btn" id="pv">◀</button><button class="btn c" id="pl">❚❚</button><button class="btn" id="nx">▶</button><input type="range" id="sc" min="0" max="0" value="0" aria-label="Scrub"></div></div><div id="rv"></div></div>`;
@@ -244,7 +254,7 @@ const w=['DNS','Cache','Packets','Kernel','Commit','Latency','Servers','Memory',
 app.innerHTML=`<section class="hero"><div><h1 class="mega" id="mg">Systems</h1><h2 class="out">What actually happens?</h2></div><div class="chain">${['phone','net','srv','lap'].map((k,i)=>`<svg viewBox="0 0 64 64">${P[k]}</svg>`+(i<3?'<i class="lk"></i>':'')).join('')}</div><div class="row"><p>You click a button. A <b>lot</b> happens after that.</p><button class="go" id="st">Start exploring ↓</button></div><div class="mq"><div>${mq}</div></div></section><div class="playground" id="tiles"><div class="pghead"><div class="eyebrow">SYSTEMS / LIVE</div><h3>SEE WHAT<br><em>HAPPENS</em><br>UNDERNEATH.</h3><p class="sub">Six everyday actions. A whole system moving underneath. Choose one and watch every hidden step happen.</p><div class="prog"><div class="pb"><b style="width:${Math.round(n/6*100)}%"></b></div><span>${n} of 6 explored</span></div></div>
 <div class="cards">${E.map((e,i)=>`<button class="card${DN[i]?' done':''}" data-i="${i}" style="--c:${e.c}"><span class="no">${DN[i]?'✓ ':''}${String(i+1).padStart(2,'0')}</span><span class="cardtag">${['NETWORK','WEB','STORAGE','VERSION CONTROL','OS','DATABASE'][i]}</span><span class="ic">${e.i}</span><div class="preview">${e.N.map((n,k)=>`<span class="mini">${IC(n)}</span>${k<e.N.length-1?'<b>→</b>':''}`).join('')}</div><div class="cardcopy"><b>${e.n}</b><span>${e.d}</span></div><div class="try">RUN IT <strong>↗</strong></div></button>`).join('')}</div>
 </div>`;
-scramble($('#mg'),'SYSTEMS',2400);let sb=0;$('#mg').onpointerenter=()=>{if(sb)return;sb=1;scramble($('#mg'),'SYSTEMS',1800);setTimeout(()=>sb=0,1900)};
+scramble($('#mg'),'SYSTEMS',2400);let ls=Date.now();$('#mg').onpointerenter=$('#mg').onpointerdown=()=>{if(Date.now()-ls<10000)return;ls=Date.now();scramble($('#mg'),'SYSTEMS',1800)};
 $('#st').onclick=()=>$('#tiles').scrollIntoView({behavior:'smooth'});
 document.querySelectorAll('.card').forEach(c=>{c.onclick=()=>{sim(E[+c.dataset.i]);scrollTo(0,0)};
 c.onpointermove=e=>{const r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;c.style.setProperty('--x',px*100+'%');c.style.setProperty('--y',py*100+'%');c.style.setProperty('--ry',(px-.5)*8+'deg');c.style.setProperty('--rx',(.5-py)*8+'deg')};
