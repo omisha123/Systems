@@ -106,7 +106,6 @@ h3{margin:0;letter-spacing:-.03em}
 abbr{position:relative;text-decoration:underline dotted var(--cy);text-underline-offset:4px;cursor:help;outline:none}
 abbr:hover:after,abbr:focus:after{content:attr(data-d);position:absolute;left:0;bottom:calc(100% + 8px);width:min(250px,70vw);padding:10px 12px;border-radius:10px;background:#0b1a36;border:1px solid var(--cy);color:var(--ink);font:500 12px/1.45 var(--hf);letter-spacing:0;text-transform:none;white-space:normal;z-index:9;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 abbr.r:hover:after,abbr.r:focus:after{left:auto;right:0}
-.cf{position:fixed;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:99}
 @media(max-width:800px){.cards{grid-template-columns:1fr}.playground{padding-top:70px}.cardcopy{padding-right:0}.try{position:static;margin-top:16px}.pipe{justify-content:flex-start}.tab{min-width:125px}.ex{margin:16px}.inp{width:calc(100% - 32px)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#bg{display:none}}
 </style></head><body>
@@ -196,10 +195,6 @@ const NL={'Your phone':'Where you type. It packs your message into data and send
 const ipf=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return[(h&255)||93,(h>>8)&255,(h>>16)&255,((h>>>24)&255)||34].join('.')};
 const esc=t=>String(t).replace(/[<&]/g,'');
 function scramble(el,txt,ms=900){const cs='ABCDEFGHJKLMNPQRSTUVWXYZ#%&01',t0=performance.now(),id=el._s=(el._s||0)+1;(function f(t){if(el._s!=id)return;const k=Math.min(1,(t-t0)/ms);el.textContent=[...txt].map((c,i)=>c===' '||k>i/txt.length?c:cs[Math.random()*cs.length|0]).join('');if(k<1)requestAnimationFrame(f)})(t0)}
-// celebration burst from an element
-function boom(el){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,cl=['#4fd8ff','#25e08a','#ffd25a','#ff5d8f','#a98bff'];
-for(let i=0;i<44;i++){const d=document.createElement('i'),a=Math.random()*6.28,v=80+Math.random()*180;d.className='cf';d.style.cssText=`left:${x}px;top:${y}px;background:${cl[i%5]}`;document.body.appendChild(d);
-d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v+120}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:900+Math.random()*500,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>d.remove()}}
 // ambient background: a lattice of shapes. Triangles ripple on their own and morph into spinning diamonds near the pointer.
 (function(){const c=$('#bg'),x=c.getContext('2d');let w,h,t=0,m={x:innerWidth/2,y:innerHeight/3,sx:innerWidth/2,sy:innerHeight/3},str=0,lm=-1e9,G=44;
 const rs=()=>{w=c.width=innerWidth;h=c.height=innerHeight;G=w<700?36:46};addEventListener('resize',rs);rs();
@@ -235,7 +230,7 @@ const pv=st.slice(0,i).map(z=>z[0]);cb.forEach((c,j)=>c.classList.toggle('lit',p
 const t=s[0],d=t>cur?1:-1;
 while(cur!=t){if(si!=i)return;const c=d>0?cur:cur-1,l=cb[c].firstChild;l.style.transform=`scaleX(${d})`;await l.animate([{left:d>0?'-40px':'100%'},{left:d>0?'100%':'-40px'}],{duration:340,easing:'ease-in-out'}).finished;if(si!=i)return;cb[c].classList.add('lit');cur+=d}
 el.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});await sl(120);if(si==i)el.classList.add('on');
-if(i==st.length-1&&si==i&&!done){done=1;DN[E.indexOf(S)]=DN[E.indexOf(S)]||1;sv();boom(el);$$('rv').innerHTML=`<div class="rv">In short: ${S.take}<small>Topics: ${S.rev[0]}</small></div>`}}
+if(i==st.length-1&&si==i&&!done){done=1;DN[E.indexOf(S)]=DN[E.indexOf(S)]||1;sv();$$('rv').innerHTML=`<div class="rv">In short: ${S.take}<small>Topics: ${S.rev[0]}</small></div>`}}
 function load(i){vi=i;st=S.S[i][1];done=0;document.querySelectorAll('.tab').forEach((b,j)=>b.classList.toggle('on',j==i));
 const pp=$$('pp');pp.innerHTML=S.N.map((n,k)=>`<div class="nd">${IC(n)}<b>${n[1]}</b><s></s></div>`+(k<S.N.length-1?'<div class="cb"><span class="ls"></span></div>':'')).join('');
 els=[...pp.querySelectorAll('.nd')];cb=[...pp.querySelectorAll('.cb')];cur=0;
