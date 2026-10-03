@@ -60,7 +60,6 @@ h3{margin:0;letter-spacing:-.03em}
 .cardcopy span{font:600 11px var(--mf);letter-spacing:.1em;color:var(--mu);text-transform:uppercase}
 .try{position:absolute;right:27px;bottom:27px;color:var(--c);font:600 10px var(--mf);letter-spacing:.16em}
 .try strong{display:inline-block;margin-left:4px;font-size:18px;transition:.25s}.card:hover .try strong{transform:translate(4px,-3px)}
-.hint{margin-top:24px;padding:20px 2px;color:var(--mu);font:500 10px var(--mf);letter-spacing:.08em;border-top:1px solid rgba(100,150,220,.14)}.hint span{color:var(--cy);margin:0 8px}
 
 .wrap{width:min(1180px,100% - 2*var(--p));margin:0 auto;padding:34px 0 90px}
 .wrap>h3{font-size:clamp(40px,7vw,80px);line-height:.9;margin:30px 0 26px;letter-spacing:-.05em}
@@ -244,7 +243,7 @@ function home(){KB=null;
 const w=['DNS','Cache','Packets','Kernel','Commit','Latency','Servers','Memory','Failover','Disk','Protocols','Merge'],mq=[...w,...w].map(t=>`<span>${t}</span><span>/</span>`).join(''),n=Object.keys(DN).length;
 app.innerHTML=`<section class="hero"><div><h1 class="mega" id="mg">Systems</h1><h2 class="out">What actually happens?</h2></div><div class="chain">${['phone','net','srv','lap'].map((k,i)=>`<svg viewBox="0 0 64 64">${P[k]}</svg>`+(i<3?'<i class="lk"></i>':'')).join('')}</div><div class="row"><p>You click a button. A <b>lot</b> happens after that.</p><button class="go" id="st">Start exploring ↓</button></div><div class="mq"><div>${mq}</div></div></section><div class="playground" id="tiles"><div class="pghead"><div class="eyebrow">SYSTEMS / LIVE</div><h3>SEE WHAT<br><em>HAPPENS</em><br>UNDERNEATH.</h3><p class="sub">Six everyday actions. A whole system moving underneath. Choose one and watch every hidden step happen.</p><div class="prog"><div class="pb"><b style="width:${Math.round(n/6*100)}%"></b></div><span>${n} of 6 explored</span></div></div>
 <div class="cards">${E.map((e,i)=>`<button class="card${DN[i]?' done':''}" data-i="${i}" style="--c:${e.c}"><span class="no">${DN[i]?'✓ ':''}${String(i+1).padStart(2,'0')}</span><span class="cardtag">${['NETWORK','WEB','STORAGE','VERSION CONTROL','OS','DATABASE'][i]}</span><span class="ic">${e.i}</span><div class="preview">${e.N.map((n,k)=>`<span class="mini">${IC(n)}</span>${k<e.N.length-1?'<b>→</b>':''}`).join('')}</div><div class="cardcopy"><b>${e.n}</b><span>${e.d}</span></div><div class="try">RUN IT <strong>↗</strong></div></button>`).join('')}</div>
-<div class="hint"><span>01</span>Every interaction is a live simulation<span>•</span>No slides. No definitions. Just watch it happen.</div></div>`;
+</div>`;
 scramble($('#mg'),'SYSTEMS',2400);let sb=0;$('#mg').onpointerenter=()=>{if(sb)return;sb=1;scramble($('#mg'),'SYSTEMS',1800);setTimeout(()=>sb=0,1900)};
 $('#st').onclick=()=>$('#tiles').scrollIntoView({behavior:'smooth'});
 document.querySelectorAll('.card').forEach(c=>{c.onclick=()=>{sim(E[+c.dataset.i]);scrollTo(0,0)};
