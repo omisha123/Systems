@@ -216,8 +216,8 @@ r=6+3*wv+11*n,ro=n*Math.PI*1.5+Math.sin(t+gx*.01)*.08,co=Math.cos(ro),si=Math.si
 q=[[0,-r],[lerp(r*.87,r,k),lerp(r*.5,0,k)],[0,lerp(r*.5,r,k)],[-lerp(r*.87,r,k),lerp(r*.5,0,k)]],
 hu=205+n*60-(d<150?n*70:0);
 x.beginPath();q.forEach((p,i)=>{const px=gx+p[0]*co-p[1]*si,py=gy+p[0]*si+p[1]*co;i?x.lineTo(px,py):x.moveTo(px,py)});x.closePath();
-x.strokeStyle=`hsla(${hu},95%,${62+n*10}%,${.14+.6*n+.08*wv})`;x.stroke();
-if(n>.08){x.fillStyle=`hsla(${hu},95%,60%,${.14*n})`;x.fill()}}
+x.strokeStyle=`hsla(${hu},80%,${58+n*6}%,${.07+.04*wv+.3*n})`;x.stroke();
+if(n>.08){x.fillStyle=`hsla(${hu},80%,58%,${.05*n})`;x.fill()}}
 requestAnimationFrame(f)})()})();
 function sim(S){
 let vi=0,si=0,tm=null,done=0,st,els,cb,cur=0;
