@@ -258,7 +258,7 @@ app.innerHTML=`<section class="hero"><div class="top"><img src="data:image/jpeg;
 </div>`;
 scramble($('#mg'),'SYSTEMS',2400);let ls=Date.now();$('#mg').onpointerenter=$('#mg').onpointerdown=()=>{if(Date.now()-ls<10000)return;ls=Date.now();scramble($('#mg'),'SYSTEMS',1800)};
 const cs=[...document.querySelectorAll('.cc')],dt=[...document.querySelectorAll('#dts i')];let mv=0;
-const pos=(c,d)=>{const a=Math.abs(d);c.style.transform=`translateX(calc(-50% + ${d} * var(--dx))) rotateY(${-d*16}deg) scale(${1-a*.15})`;c.style.zIndex=10-a;c.style.opacity=a>2?0:1-a*.22;c.style.pointerEvents=a>2?'none':'auto';c.classList.toggle('ac',!d);c.tabIndex=d?-1:0};
+const pos=(c,d)=>{const a=Math.abs(d);c.style.transform=`translateX(calc(-50% + ${d} * var(--dx))) rotateY(${-d*16}deg) scale(${1-a*.15})`;c.style.zIndex=10-a;c.style.opacity=a>1?0:1-a*.22;c.style.pointerEvents=a>1?'none':'auto';c.classList.toggle('ac',!d);c.tabIndex=d?-1:0};
 const snap=(c,d)=>{c.style.transition='none';pos(c,d);void c.offsetWidth;c.style.transition=''};
 const lay=()=>{cs.forEach((c,i)=>{const d=((i-CF+6)%4)-2,p=c._d,wr=p!=null&&Math.abs(d-p)>2;c._d=d;
 if(!wr)pos(c,d);
